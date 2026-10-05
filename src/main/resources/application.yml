@@ -1,0 +1,26 @@
+micronaut:
+  application:
+    name: studentCrud
+
+# ---------------------------------------------------------------
+# DEFAULT database = PostgreSQL
+# (create the database/user locally, or override with env variables)
+# If PostgreSQL is not reachable, Application.java switches to the
+# "h2" environment and application-h2.yml overrides these values.
+# ---------------------------------------------------------------
+datasources:
+  default:
+    url: ${JDBC_URL:`jdbc:postgresql://localhost:5432/student_crud`}
+    driver-class-name: org.postgresql.Driver
+    username: ${JDBC_USER:student}
+    password: ${JDBC_PASSWORD:student}
+    dialect: POSTGRES
+
+# Hibernate creates/updates the "student" table automatically from the entity class.
+jpa:
+  default:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        show_sql: true

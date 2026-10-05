@@ -1,0 +1,221 @@
+{
+  "info": {
+    "name": "Student CRUD - Micronaut",
+    "description": "Postman collection for the Micronaut Student CRUD API. Run 'Create Student' first; it saves the new id into {{studentId}} for the other requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "studentId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Create Student",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/students",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "students"
+          ]
+        },
+        "description": "Creates a student. Expected: 201 Created with the saved student (including id).",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Asha\",\n  \"email\": \"asha@example.com\",\n  \"age\": 21\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+              "const json = pm.response.json();",
+              "pm.collectionVariables.set('studentId', json.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Get All Students",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/students",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "students"
+          ]
+        },
+        "description": "Returns the list of all students. Expected: 200 OK."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Search Students By Name",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/students/search?name=Asha",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "students",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "name",
+              "value": "Asha"
+            }
+          ]
+        },
+        "description": "Searches students by name using the 'name' query parameter. Expected: 200 OK with a list."
+      },
+      "response": []
+    },
+    {
+      "name": "4. Get Student By Id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/students/{{studentId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "students",
+            "{{studentId}}"
+          ]
+        },
+        "description": "Returns one student. Expected: 200 OK, or 404 Not Found if the id doesn't exist."
+      },
+      "response": []
+    },
+    {
+      "name": "5. Update Student",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/students/{{studentId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "students",
+            "{{studentId}}"
+          ]
+        },
+        "description": "Updates an existing student. Expected: 200 OK, or 404 Not Found.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Asha K\",\n  \"email\": \"asha.k@example.com\",\n  \"age\": 22\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "6. Delete Student",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/students/{{studentId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "students",
+            "{{studentId}}"
+          ]
+        },
+        "description": "Deletes a student. Expected: 204 No Content, or 404 Not Found."
+      },
+      "response": []
+    },
+    {
+      "name": "7. Create Student - Validation Error (demo)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/students",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "students"
+          ]
+        },
+        "description": "Sends invalid data on purpose. Expected: 400 Bad Request with validation messages.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"\",\n  \"email\": \"not-an-email\",\n  \"age\": 0\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 400', () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
